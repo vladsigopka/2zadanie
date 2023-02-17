@@ -1,0 +1,11 @@
+
+.col{
+    border: 1px solid black;
+    width: 360px;
+    height: 150px;
+
+}
+#cols{
+    display: flex;
+    justify-content: space-around
+}
