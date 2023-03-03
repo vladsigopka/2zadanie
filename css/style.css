@@ -55,6 +55,7 @@
     border: 1px solid black;
     margin: 4px;
     background-color: white;
+    border-radius: 5px;
 }
 .bigtext{
     border-bottom: 1px solid black;
