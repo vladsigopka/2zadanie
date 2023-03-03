@@ -104,7 +104,7 @@ Vue.component('newcard', {
         }
     },
     methods: {
-        onsubmit(){
+        onSubmit(){
             let card = {
                 title: this.title,
                 subtasks: [{
