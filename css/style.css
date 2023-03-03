@@ -10,7 +10,9 @@
 }
 #cols{
     display: flex;
-    justify-content: space-around
+    justify-content: space-around;
+
+
 }
 #addcols{
     display: flex;
@@ -26,5 +28,35 @@
     background-color: #96e8fd;
     padding: 20px;
     border-radius: 10px;
+}
+.tasks.completed {
+    background-color: green;
+    list-style-type: none;
+}
+.tasks{
+    list-style-type: none;
+    display: flex;
+    justify-content: center;
+
+}
+.tasksUl{
+    margin: 0px;
+    padding: 0px;
+}
+.col {
+    width: 30%;
+    margin-right: 15px;
+    height: 850px;
+    text-align: center;
+    border-radius: 5px;
+    background-color: #96e8fd;
+}
+.cards{
+    border: 1px solid black;
+    margin: 4px;
+    background-color: white;
+}
+.bigtext{
+    border-bottom: 1px solid black;
 }
 
