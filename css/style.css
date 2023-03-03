@@ -1,3 +1,6 @@
+#app{
+    text-align: center;
+}
 
 .col{
     border: 1px solid black;
@@ -9,3 +12,19 @@
     display: flex;
     justify-content: space-around
 }
+#addcols{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 20px;
+
+}
+.subtasks{
+    margin-bottom: 5px;
+}
+.addform{
+    background-color: #96e8fd;
+    padding: 20px;
+    border-radius: 10px;
+}
+

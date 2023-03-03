@@ -67,26 +67,153 @@ Vue.component('cols', {
     }
 })
 
+
+
+
+Vue.component('col1' , {
+    template: `
+    <div class="col">
+         <div class="cards"
+         v-for="card in column1"
+     >
+    <h2>{{card.title}}</h2>
+    <ul>
+   <li class="tasks" v-for="task in card.subtasks" 
+                    v-if="task.title != null" 
+                    @click="changeCompleted(card, task)" 
+                    :class="{completed: task.completed}">
+      {{task.title}}
+     </li>
+    </ul>
+</div>
+</div>
+    `,
+    props:{
+        column1: {
+            type: Array,
+        },
+        column2: {
+            type: Array,
+        },
+        card: {
+            type: Object,
+        },
+        errors: {
+            type: Array
+        }
+    },
+    methods: {
+        changeCompleted(card, task) {
+            task.completed = true
+            card.status += 1
+            let count = 0
+            for(let i = 0; i < 5; i++){
+                if (card.subtasks[i].title != null) {
+                    count++
+                }
+            }
+
+            if ((card.status / count) * 100 >= 50) {
+                eventBus.$emit('addColumn2', card)
+            }
+            if ((card.status / count) * 100 === 100) {
+                card.date = new Date().toLocaleString()
+                eventBus.$emit('addColumn1-3', card)
+            }
+        },
+    },
+})
+Vue.component('col2', {
+    template: `
+        <div class="col">
+    <div class="cards"
+    v-for="card in column2"
+    >
+    <h2>{{card.title}}</h2>
+    <ul>
+    <li class="tasks" v-for="task in card.subtasks"
+    v-if="task.title!=null"
+    @click="changeCompleted(card,task)"
+    :class="{completed: task.completed}"
+    >
+    {{task.title}}
+        </li>
+    </ul>
+</div>
+</div>
+    `,
+    props: {
+        column2: {
+            type: Array,
+        },
+        card: {
+            type: Object,
+        }
+        },
+    methods: {
+        changeCompleted(card, task) {
+            task.completed = true
+            card.status += 1
+            let count = 0
+            for(let i = 0; i < 5; i++){
+                if (card.subtasks[i].title != null) {
+                    count++
+                }
+            }
+            if ((card.status / count) * 100 === 100) {
+                eventBus.$emit('addColumn3', card)
+                card.date = new Date().toLocaleString();
+            }
+        }
+    }
+})
+Vue.component('col3', {
+    template: `
+            <div class="col">
+    <div class="cards"
+    v-for="card in column3"
+    >
+    <h2>{{card.title}}</h2>
+    <ul>
+     <li class="tasks" v-for="task in card.subtasks" >
+                        {{task.title}}
+                    </li>
+                     <p>{{ card.date }}</p>
+    </ul>
+</div>
+</div>
+    `,
+    props: {
+        column3: {
+            type: Array
+        },
+        card: {
+            type: Object
+        }
+    }
+})
+
+
 Vue.component('newcard', {
     template: `
     <form class="addform" @submit.prevent="onSubmit">
-            <label for="title">Ведите заметку </label>
+            <label for="title">Введите заметку </label>
         <p>
             <input id="title" required v-model="title" maxlength="30" type="text" placeholder="название">
         </p>
-        <div>
+        <div class="subtasks">
             <input required id="subtask1" v-model="subtask1" maxlength="30" placeholder="задача">
         </div>
-        <div>
+        <div class="subtasks">
             <input required id="subtask2" v-model="subtask2" maxlength="30" placeholder="задача">
         </div>
-        <div>
+        <div class="subtasks">
             <input required id="subtask3" v-model="subtask3" maxlength="30" placeholder="задача">
         </div>
-        <div>
+        <div class="subtasks">
             <input  id="subtask4" v-model="subtask4" maxlength="30" placeholder="задача">
         </div>
-        <div>
+        <div class="subtasks">
             <input  id="subtask5" v-model="subtask5" maxlength="30" placeholder="задача">
         </div>
         <button type="submit">добавить заметку</button>
@@ -125,141 +252,14 @@ Vue.component('newcard', {
             this.subtask4 = null
             this.subtask5 = null
         }
-}
-})
-
-
-Vue.component('col1' , {
-    template: `
-    <div class="col">
-    <div class="cards"
-    v-for="card in column1"
-    >
-    <h2>{{card.title}}</h2>
-    <ul>
-    <li class="tasks" v-for="task in card.subtasks"
-    v-if="task.title!=null"
-    @click="changeCompleted(card,task)"
-    :class="{completed: task.completed}"
-    >
-    {{task.title}}
-        </li>
-    </ul>
-</div>
-</div>
-    `,
-    props:{
-        column1: {
-            type: Array,
-        },
-        column2: {
-            type: Array,
-        },
-        card: {
-            type: Object,
-        },
-        errors: {
-            type: Array
-        }
-    },
-    method:{
-        changeCompleted(card,task){
-            task.Completed = true
-            card.status += 1
-            let count = 0
-            for(let i = 0; i < 5; i++){
-                if(card.subtasks[i].title != null){
-                    count ++
-                }
-            }
-            if((card.status / count) * 100 >= 50){
-                eventBus.$emit('addColumn2', card)
-            }
-            if((card.status / count) *100 ===100){
-                card.date = new Date().toLocaleString()
-                eventBus.$emit('addColumn1-3', card)
-            }
-        },
     }
 })
-Vue.component('col2', {
-    template: `
-        <div class="col">
-    <div class="cards"
-    v-for="card in column2"
-    >
-    <h2>{{card.title}}</h2>
-    <ul>
-    <li class="tasks" v-for="task in card.subtasks"
-    v-if="task.title!=null"
-    @click="changeCompleted(card,task)"
-    :class="{completed: task.completed}"
-    >
-    {{task.title}}
-        </li>
-    </ul>
-</div>
-</div>
-    `,
-    props: {
-        column2: {
-            type: Array,
-        },
-        card: {
-            type: Object,
-        }
-        },
-    method: {
-        changeCompleted(card,task) {
-            task.Completed = true
-            card.status += 1
-            let count = 0
-            for (let i = 0; i < 5; i++) {
-                if (card.subtasks[i].title != null) {
-                    count++
-                }
-            }
-            if ((card.status / count) * 100 === 100) {
-                card.date = new Date().toLocaleString()
-                eventBus.$emit('addColumn1-3', card)
-            }
-        }
-    }
-})
-Vue.component('col3', {
-    template: `
-            <div class="col">
-    <div class="cards"
-    v-for="card in column3"
-    >
-    <h2>{{card.title}}</h2>
-    <ul>
-    <li class="tasks" v-for="task in card.subtasks"
-    v-if="task.title!=null"
-    @click="changeCompleted(card,task)"
-    :class="{completed: task.completed}"
-    >
-    {{task.title}}
-        </li>
-    </ul>
-</div>
-</div>
-    `,
-    props: {
-        column3: {Array,
-        },
-        card: {
-            Object,
-        }
-    },
-})
-
-
-
 
 
 let app = new Vue({
     el: '#app',
+methods: {
 
+}
 
 })
