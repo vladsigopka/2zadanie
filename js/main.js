@@ -5,7 +5,7 @@ let eventBus = new Vue()
 
 
 
-Vue.component('cols', {
+Vue.component('cols', {  //определяет компоненты для приложения
     template:`
  
     <div id="colsAForm">
@@ -23,41 +23,42 @@ Vue.component('cols', {
     
 `,
     data() {
+        // Определение данных компонента (data)
         return {
-            column1: [],
-            column2: [],
-            column3: [],
-            errors: []
+            column1: [], // Массив для хранения данных колонки 1
+            column2: [], // Массив для хранения данных колонки 2
+            column3: [], // Массив для хранения данных колонки 3
+            errors: [] // Массив для хранения ошибок
         }
     },
-    method:{
+    method:{  // Определение методов компонента (methods)
 
     },
     mounted() {
         eventBus.$on('addColumn1', card => {
             this.errors = []
-            if (this.column1.length < 3) {
-                this.column1.push(card)
+            if (this.column1.length < 3) {  // Проверка, может ли карточка быть добавлена в первую колонку
+                this.column1.push(card)  // Добавление карточки в первую колонку
             } else {
-                this.errors.push('В первой колонке должно быть не более трех карточек')
+                this.errors.push('В первой колонке должно быть не более трех карточек')  // Добавление ошибки
             }
         })
         eventBus.$on('addColumn2', card => {
             this.errors = []
-            if (this.column2.length < 5) {
-                this.column2.push(card)
-                this.column1.splice(this.column1.indexOf(card), 1)
+            if (this.column2.length < 5) {   // Проверка, может ли карточка быть добавлена во вторую колонку
+                this.column2.push(card)  // Добавление карточки
+                this.column1.splice(this.column1.indexOf(card), 1)  // Удаление карточки из первой колонки
             } else {
-                his.errors.push("Во второй колонке должно быть не более пяти карточек")
+                his.errors.push("Во второй колонке должно быть не более пяти карточек")  // Добавление ошибки
             }
 
         })
         eventBus.$on('addColumn3', card => {
-            this.column3.push(card)
-            this.column2.splice(this.column2.indexOf(card), 1)
+            this.column3.push(card) // Добавление карточки в третью колонку
+            this.column2.splice(this.column2.indexOf(card), 1)   // Удаление карточки из второй колонки
         })
         eventBus.$on('addColumn1-3', card => {
-            this.column3.push(card)
+            this.column3.push(card)   // Добавление карточки в третью колонку
             this.column1.splice(this.column1.indexOf(card), 1)
         })
 
@@ -104,7 +105,7 @@ Vue.component('newcard', {
         }
     },
     methods: {
-        onSubmit(){
+        onSubmit(){    // Создаем объект заметки (card) с данными из формы
             let card = {
                 title: this.title,
                 subtasks: [{
@@ -117,7 +118,8 @@ Vue.component('newcard', {
                 status: 0,
                 errors: [],
             }
-            eventBus.$emit('addColumn1', card)
+            eventBus.$emit('addColumn1', card)  // Используем eventBus для отправки данных о новой заметке
+            // Сбрасываем значения полей формы
             this.title = null
             this.subtask1 = null
             this.subtask2 = null
@@ -164,19 +166,19 @@ Vue.component('col1' , {
     },
     methods: {
         changeCompleted(card, task) {
-            task.completed = true
-            card.status += 1
+            task.completed = true  // Устанавливаем флаг "completed" для задачи в true
+            card.status += 1 // Увеличиваем счетчик статуса заметки
             let count = 0
-            for(let i = 0; i < 5; i++){
+            for(let i = 0; i < 5; i++){  // Считаем общее количество задач в заметке
                 if (card.subtasks[i].title != null) {
                     count++
                 }
             }
 
-            if ((card.status / count) * 100 >= 50) {
+            if ((card.status / count) * 100 >= 50) {   // Если более 50% задач завершены, отправляем событие "addColumn2"
                 eventBus.$emit('addColumn2', card)
             }
-            if ((card.status / count) * 100 === 100) {
+            if ((card.status / count) * 100 === 100) {   
                 card.date = new Date().toLocaleString()
                 eventBus.$emit('addColumn1-3', card)
             }
